@@ -40,7 +40,8 @@ export default {
 <style scoped lang="scss">
 
 .bottom_menu {
-  position: absolute;
+  z-index: 999;
+  position: fixed;
   bottom: 0;
   height: 56px;
   left: 0;
@@ -48,10 +49,11 @@ export default {
   border: none;
   border-top: 1px solid #EBEEF5;
   box-shadow: 0 -5px 10px  -4px rgba(0, 0, 0, .1);
+  background: #FFFFFF;
 }
 
 .select {
-  color: #E0E30B;
+  color: #409EFF;
 }
 
 .bottom {

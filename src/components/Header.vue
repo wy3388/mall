@@ -39,7 +39,7 @@ export default {
 header {
   height: 50px;
   width: 100%;
-  background: #E0E30B;
+  background: #409EFF;
   line-height: 50px;
   text-align: center;
 
@@ -54,6 +54,7 @@ header {
 
   span {
     margin-left: -5%;
+    color: #FFFFFF;
   }
 
 }

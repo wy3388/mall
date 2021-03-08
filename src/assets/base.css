@@ -1,3 +1,11 @@
 .text-color-gray {
     color: #909399;
 }
+
+.body {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    height: calc(100% - 106px);
+    overflow: auto;
+}

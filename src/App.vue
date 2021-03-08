@@ -1,7 +1,6 @@
 <template>
   <div>
-    <router-view/>
-    <BottomMenu/>
+    <router-view />
   </div>
 </template>
 
@@ -16,10 +15,3 @@
   user-select:none;
 }
 </style>
-<script>
-import BottomMenu from "@/components/BottomMenu";
-
-export default {
-  components: {BottomMenu}
-}
-</script>
