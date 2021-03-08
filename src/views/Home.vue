@@ -1,12 +1,16 @@
 <template>
   <div class="home">
-    <h1 class="text-color-gray">home</h1>
+    <Header title="首页" :show-back="false"/>
+    <Loading />
   </div>
 </template>
 
 <script>
+import Header from "@/components/Header";
+import Loading from "@/components/Loading";
 export default {
-  name: "Home"
+  name: "Home",
+  components: {Loading, Header}
 }
 </script>
 
