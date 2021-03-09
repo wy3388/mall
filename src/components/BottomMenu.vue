@@ -1,19 +1,19 @@
 <template>
   <div class="bottom_menu">
     <div class="bottom">
-      <div class="btn" @click="click(1)" :class="index === 1?'select':'text-color-gray'">
+      <div class="btn" @click="click(1)" :class="activeIndex === 1?'select':'text-color-gray'">
         <i class="el-icon-s-grid"></i>
         <span>首页</span>
       </div>
-      <div class="btn" @click="click(2)" :class="index === 2?'select':'text-color-gray'">
+      <div class="btn" @click="click(2)" :class="activeIndex === 2?'select':'text-color-gray'">
         <i class="el-icon-position"></i>
         <span>发现</span>
       </div>
-      <div class="btn" @click="click(3)" :class="index === 3?'select':'text-color-gray'">
+      <div class="btn" @click="click(3)" :class="activeIndex === 3?'select':'text-color-gray'">
         <i class="el-icon-document"></i>
         <span>订单</span>
       </div>
-      <div class="btn" @click="click(4)" :class="index === 4?'select':'text-color-gray'">
+      <div class="btn" @click="click(4)" :class="activeIndex === 4?'select':'text-color-gray'">
         <i class="el-icon-user"></i>
         <span>我的</span>
       </div>
@@ -24,14 +24,27 @@
 <script>
 export default {
   name: "BottomMenu",
-  data() {
+  props: {
+    index: {
+      required: false,
+      type: Number,
+      default: 1
+    }
+  },
+  data(){
     return {
-      index: 1
+      activeIndex: this.index
     }
   },
   methods: {
     click(i) {
-      this.index = i
+      this.activeIndex = i
+      if(this.activeIndex === 1) {
+        this.$router.replace({path: '/'})
+      }
+      if (this.activeIndex === 2) {
+        this.$router.replace({path: '/hot'})
+      }
     }
   }
 }

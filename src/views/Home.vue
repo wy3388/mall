@@ -47,35 +47,48 @@
         <span>美食推荐</span>
         <div class="hot_goods_top">
           <el-select clearable placeholder="请选择" value size="mini" class="select_menu">
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
+<!--            <el-option-->
+<!--                v-for="item in options"-->
+<!--                :key="item.value"-->
+<!--                :label="item.label"-->
+<!--                :value="item.value">-->
+<!--            </el-option>-->
           </el-select>
           <el-select clearable placeholder="请选择" value size="mini" class="select_menu">
-            <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-            </el-option>
+<!--            <el-option-->
+<!--                v-for="item in options"-->
+<!--                :key="item.value"-->
+<!--                :label="item.label"-->
+<!--                :value="item.value">-->
+<!--            </el-option>-->
           </el-select>
         </div>
         <div class="hot_list">
-          <div class="item">
-            <div class="item_left">
-              <img src="../assets/logo.png" alt="">
+          <el-card v-for="(item, index) in 10" :key="index">
+            <div class="item">
+              <div class="item_left">
+                <img src="../assets/logo.png" alt="">
+              </div>
+              <div class="item_right">
+                <span class="shop_name">享多味炸鸡（巴国城店铺）啊啊啊啊啊啊</span>
+                <div class="score">
+                  <i class="el-icon-star-on"></i>
+                  <span class="text-color-gray">4.6分</span>
+                  <span class="text-color-gray">月售1200</span>
+                  <span class="text-color-gray">30分钟</span>
+                </div>
+                <div class="score">
+                  <span class="text-color-gray">起送 ¥15</span>
+                  <span class="text-color-gray">配送 ¥2.5</span>
+                </div>
+                <span class="shop_name text-color-gray">描述描述描述描述描述描述描述描述描述描述描述描述描述描述</span>
+              </div>
             </div>
-            <div class="item_right">
-              <h6>享多味炸鸡（巴国城店铺）啊啊啊啊啊啊</h6>
-            </div>
-          </div>
+          </el-card>
         </div>
       </div>
     </div>
-    <BottomMenu/>
+    <BottomMenu :index="1"/>
   </div>
 </template>
 
@@ -117,13 +130,17 @@ export default {
   .hot_list {
     margin-top: 2%;
 
+    .el-card {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
     .item {
       display: flex;
 
       .item_left {
         height: 120px;
         width: 120px;
-        background: red;
 
         img {
           height: 100%;
@@ -137,10 +154,40 @@ export default {
         flex-direction: column;
         width: calc(93% - 120px);
 
-        h6 {
+        .shop_name {
+          width: 150px;
           overflow: hidden;
           text-overflow:ellipsis;
           white-space: nowrap;
+
+          &:last-child {
+            margin-top: 10px;
+            font-size: 13px;
+          }
+        }
+
+        .score {
+          margin-top: 5px;
+          display: flex;
+          align-items: center;
+
+          i {
+            color: #E0E30B;
+          }
+
+          span {
+            font-size: 13px;
+
+            &:nth-child(n+3):nth-child(-n+4){
+              margin-left: 10px;
+            }
+          }
+
+          &:last-child {
+            span {
+              margin-right: 20px;
+            }
+          }
         }
       }
     }
