@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="hot_goods">
-        <span>美食推荐</span>
+        <span>热门美食推荐</span>
         <div class="hot_goods_top">
           <el-select clearable placeholder="请选择" value size="mini" class="select_menu">
 <!--            <el-option-->
@@ -198,9 +198,9 @@ export default {
   width: 90%;
   margin-top: 2%;
   margin-left: 5%;
-  border-left: 1px solid #909399;
-  border-bottom: 1px solid #909399;
-  border-right: 1px solid #909399;
+  border-left: 1px solid #409EFF;
+  border-bottom: 1px solid #409EFF;
+  border-right: 1px solid #409EFF;
   border-radius: 20px;
   padding-bottom: 10px;
 

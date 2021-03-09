@@ -3,14 +3,16 @@
     <Header :show-back="false" title="好店发现"/>
     <div class="body">
       <div class="content">
-        <el-card v-for="(item, index) in 10" :key="index">
-          <div class="item">
-            <img src="../assets/logo.png" alt=""/>
-            <span>叫了只鸡叫了只鸡叫了只鸡</span>
-            <span class="text-color-gray">月售2888</span>
-            <span class="text-color-gray">起送¥15</span>
-          </div>
-        </el-card>
+        <div class="items" v-for="(item, index) in 10" :key="index">
+          <el-card>
+            <div class="item">
+              <img src="../assets/logo.png" alt=""/>
+              <span>叫了只鸡叫了只鸡叫了只鸡</span>
+              <span class="text-color-gray">月售2888</span>
+              <span class="text-color-gray">起送¥15</span>
+            </div>
+          </el-card>
+        </div>
       </div>
     </div>
     <BottomMenu :index="2"/>
@@ -39,28 +41,35 @@ export default {
   width: 90%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
 
-  .item {
-    display: flex;
-    flex-direction: column;
+  .items {
+    flex-basis: 50%;
+    width: 50%;
 
-    img {
-      height: 100px;
-      width: 100px;
-    }
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
-    span:nth-of-type(1) {
-      margin-top: 5px;
-      width: 100px;
-      overflow: hidden;
-      text-overflow:ellipsis;
-      white-space: nowrap;
-    }
+      img {
+        height: 100px;
+        width: 100px;
+      }
 
-    span:nth-of-type(n+2):nth-of-type(-n+3) {
-      margin-top: 5px;
-      font-size: 13px;
+      span:nth-of-type(1) {
+        align-self: flex-start;
+        margin-top: 5px;
+        width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      span:nth-of-type(n+2):nth-of-type(-n+3) {
+        align-self: flex-start;
+        margin-top: 5px;
+        font-size: 13px;
+      }
     }
   }
 }

@@ -13,5 +13,7 @@
   -webkit-user-select:none;
   -ms-user-select:none;
   user-select:none;
+  //-ms-overflow-style:none; overflow:-moz-scrollbars-none;
 }
+//::-webkit-scrollbar {display:none}
 </style>
