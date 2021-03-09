@@ -20,28 +20,30 @@
         </div>
       </div>
       <div class="hot">
-        <div class="hot_title">
-          <span>好店推荐</span>
-          <span>更多 >></span>
-        </div>
-        <div class="hot_content">
-          <div>
-            <img src="../assets/logo.png" alt=""/>
-            <span>乡村基(大坪店)</span>
+        <el-card>
+          <div slot="header" class="clearfix hot_title">
+            <span>好店推荐</span>
+            <span style="float: right">>></span>
           </div>
-          <div>
-            <img src="../assets/logo.png" alt=""/>
-            <span>乡村基(大坪店)</span>
+          <div class="hot_content">
+            <div>
+              <img src="../assets/logo.png" alt=""/>
+              <span>乡村基(大坪店)</span>
+            </div>
+            <div>
+              <img src="../assets/logo.png" alt=""/>
+              <span>乡村基(大坪店)</span>
+            </div>
+            <div>
+              <img src="../assets/logo.png" alt=""/>
+              <span>乡村基(大坪店)</span>
+            </div>
+            <div>
+              <img src="../assets/logo.png" alt=""/>
+              <span>乡村基(大坪店)</span>
+            </div>
           </div>
-          <div>
-            <img src="../assets/logo.png" alt=""/>
-            <span>乡村基(大坪店)</span>
-          </div>
-          <div>
-            <img src="../assets/logo.png" alt=""/>
-            <span>乡村基(大坪店)</span>
-          </div>
-        </div>
+        </el-card>
       </div>
       <div class="hot_goods">
         <span>热门美食推荐</span>
@@ -196,13 +198,7 @@ export default {
 
 .hot {
   width: 90%;
-  margin-top: 2%;
-  margin-left: 5%;
-  border-left: 1px solid #409EFF;
-  border-bottom: 1px solid #409EFF;
-  border-right: 1px solid #409EFF;
-  border-radius: 20px;
-  padding-bottom: 10px;
+  margin: 5%;
 
   .hot_content {
     display: flex;
@@ -224,27 +220,21 @@ export default {
       }
 
       span {
+        font-size: 14px;
         margin-top: 5px;
       }
     }
   }
 
   .hot_title {
-    height: 50px;
-    display: flex;
-    background: #409EFF;
-    align-items: center;
-    border-radius: 20px 20px 0 0;
-    padding: 0 10px 0 10px;
 
     span {
       font-size: 18px;
-      color: #FFFFFF;
     }
 
     span:last-child {
-      margin-left: auto;
       font-size: 14px;
+      float: right;
     }
   }
 }
@@ -268,6 +258,10 @@ export default {
       height: 40px;
       width: 40px;
       border-radius: 20px;
+    }
+
+    span {
+      font-size: 14px;
     }
   }
 }

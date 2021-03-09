@@ -33,7 +33,7 @@
               <el-card>
                 <div>
                   <i class="el-icon-edit"></i>
-                  <span>修改手机号</span>
+                  <span>修改昵称</span>
                 </div>
               </el-card>
             </div>
@@ -41,7 +41,7 @@
               <el-card>
                 <div>
                   <i class="el-icon-lock"></i>
-                  <span>修改手机号</span>
+                  <span>修改密码</span>
                 </div>
               </el-card>
             </div>
@@ -49,7 +49,7 @@
               <el-card>
                 <div>
                   <i class="el-icon-star-on"></i>
-                  <span>修改手机号</span>
+                  <span>我的收藏</span>
                 </div>
               </el-card>
             </div>
@@ -94,7 +94,6 @@ export default {
     }
 
     span {
-      font-weight: bold;
       margin-top: 10px;
       font-size: 16px;
     }
