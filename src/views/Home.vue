@@ -68,9 +68,9 @@
         </div>
         <div class="hot_list">
           <van-list v-model="loading"
-                     :finished="finished"
-                     finished-text="没有更多了"
-                     @load="onLoad">
+                    :finished="finished"
+                    finished-text="没有更多了"
+                    @load="onLoad">
             <el-card v-for="(item, index) in list" :key="index">
               <div class="item">
                 <div class="item_left">
@@ -116,6 +116,7 @@ export default {
   },
   methods: {
     search() {
+      this.$router.push({path: '/info'})
     },
     onLoad() {
       setTimeout(() => {
