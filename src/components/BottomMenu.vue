@@ -31,7 +31,7 @@ export default {
       default: 1
     }
   },
-  data(){
+  data() {
     return {
       activeIndex: this.index
     }
@@ -39,11 +39,17 @@ export default {
   methods: {
     click(i) {
       this.activeIndex = i
-      if(this.activeIndex === 1) {
+      if (this.activeIndex === 1) {
         this.$router.replace({path: '/'})
       }
       if (this.activeIndex === 2) {
         this.$router.replace({path: '/hot'})
+      }
+      if (this.activeIndex === 3) {
+        this.$router.replace({path: '/order'})
+      }
+      if (this.activeIndex === 4) {
+        this.$router.replace({path: '/my'})
       }
     }
   }
