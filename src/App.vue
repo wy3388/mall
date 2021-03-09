@@ -14,4 +14,12 @@
   -ms-user-select:none;
   user-select:none;
 }
+
+.van-loading{
+  text-align: center;
+}
+
+.van-list__finished-text {
+  text-align: center;
+}
 </style>
