@@ -174,7 +174,7 @@ export default {
           align-items: center;
 
           i {
-            color: #E0E30B;
+            color: #EEB829;
           }
 
           span {

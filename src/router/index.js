@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import Hot from "@/views/Hot";
 import Order from "@/views/Order";
 import My from "@/views/My";
+import Info from "@/views/Info";
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,11 @@ const routes = [
         path: '/my',
         name: 'My',
         component: My
+    },
+    {
+        path: '/info',
+        name: 'Info',
+        component: Info
     }
 ]
 
