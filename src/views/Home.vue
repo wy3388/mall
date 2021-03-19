@@ -111,7 +111,8 @@ export default {
     return {
       loading: false,
       finished: false,
-      list: []
+      list: [],
+      page: 1
     }
   },
   methods: {
@@ -125,6 +126,13 @@ export default {
         }
         this.finished = true
       }, 1000)
+    },
+    requestData() {
+      this.$http.get("").then(resp => {
+        console.log(resp)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   }
 }
