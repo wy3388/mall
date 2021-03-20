@@ -1,33 +1,36 @@
 <template>
   <div>
-    <Header title="店铺详情" :show-back="true"/>
+    <header>
+      <i class="el-icon-arrow-left" @click="goBack"></i>
+      <span>店铺详情</span>
+      <span class="star" v-show="data.is_collect === 'no' && isShow" @click="star">收藏</span>
+    </header>
     <div class="body">
       <div class="content">
         <el-card>
           <div class="top">
             <div class="left">
-              <h5>叫了只鸡（石桥铺店）叫了只鸡（石桥铺店）叫了只鸡（石桥铺店）叫了只鸡（石桥铺店）叫了只鸡（石桥铺店）</h5>
+              <h5>{{ data.name }}</h5>
               <nav>
-                <i class="el-icon-star-on">4.5分</i>
-                <span>月售1200</span>
-                <span>配送约30分钟</span>
+                <i class="el-icon-star-on">{{ data.score }}分</i>
+                <span>配送约{{ data.delivery_time }}分钟</span>
               </nav>
-              <span class="address">重庆市石桥铺高创敬业大厦 ></span>
-              <span class="info">简介介绍简介介绍简介介绍简介介绍简</span>
+              <span class="address">{{ data.address }} ></span>
+              <span class="info">{{ data.abstract }}</span>
             </div>
-            <img src="../assets/logo.png" alt=""/>
+            <img :src="data.img" alt=""/>
           </div>
         </el-card>
-        <div class="item" v-for="(item, index) in 5" :key="index" @click="add(index)">
+        <div class="item" v-for="(item, index) in data.munus" :key="index" @click="add(index)">
           <el-card>
             <div class="goods">
-              <img src="../assets/logo.png" alt="">
+              <img :src="item.img" alt="">
               <nav>
-                <span class="name">农家土蛋肠粉</span>
-                <span class="number">月售200</span>
+                <span class="name">{{ item.name }}</span>
+                <span class="number">月售{{ item.sale }}</span>
                 <div>
-                  <span>¥12</span>
-                  <span><del>¥15</del></span>
+                  <span>¥{{ item.current_amount }}</span>
+                  <span><del>¥{{ item.original_amount }}</del></span>
                   <i class="el-icon-circle-plus"></i>
                 </div>
               </nav>
@@ -38,18 +41,18 @@
     </div>
     <div class="menu" v-show="goods.length > 0">
       <span>已选商品</span>
-      <div class="item" v-for="(item, index) in goods.length" :key="index">
+      <div class="item" v-for="(item, index) in goods" :key="index">
         <el-card>
           <div class="goods">
-            <img src="../assets/logo.png" alt="">
+            <img :src="item.img" alt="">
             <div class="fonts">
-              <span>辣子鸡丁</span>
+              <span>{{ item.name }}</span>
               <nav>
-                <span>¥15</span>
-                <span><del>¥18</del></span>
+                <span>¥{{ item.current_amount }}</span>
+                <span><del>¥{{ item.original_amount }}</del></span>
               </nav>
             </div>
-            <el-link>删除</el-link>
+            <el-link @click="del(index)">删除</el-link>
           </div>
         </el-card>
       </div>
@@ -59,34 +62,139 @@
         <img src="../assets/good.png" alt="" class="good_icon"/>
       </el-badge>
       <nav>
-        <span>¥15</span>
-        <span>配送费 ¥2.5</span>
+        <span>¥{{ price }}</span>
+        <span>配送费 ¥{{ data.send_amount }}</span>
       </nav>
-      <el-button type="primary" round size="medium">结算</el-button>
+      <el-button type="primary" round size="medium" @click="pay">结算</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
+import {getId} from "../util";
 
 export default {
   name: "Info",
-  components: {Header},
   data() {
     return {
-      goods: []
+      goods: [],
+      data: {},
+      id: '',
+      price: 0,
+      isShow: true
     }
   },
+  mounted() {
+    this.id = this.$route.query.id
+    this.requestData()
+  },
   methods: {
-    add(k){
-      this.goods.push(k)
+    star() {
+      this.$http.post('api/home/collectStroe', {user_id: getId(), store_id: this.data.id})
+          .then(resp => {
+            let data = resp.data
+            this.$toast(data.msg)
+            if (data.code !== 0) {
+              this.isShow = false
+            }
+          }).catch(() => {
+        this.$toast('操作失败')
+      })
+    },
+    goBack() {
+      this.$router.go(-1)
+    },
+    add(k) {
+      this.goods.push(this.data.munus[k])
+      this.calcPrice()
+    },
+    del(k) {
+      this.goods.splice(k, 1)
+      this.calcPrice()
+    },
+    calcPrice() {
+      let n = 0;
+      for (let i = 0; i < this.goods.length; i++) {
+        let item = this.goods[i]
+        n += parseFloat(item.current_amount)
+      }
+      this.price = n
+    },
+    pay() {
+      if (this.goods.length < 1) {
+        this.$toast('请选择商品')
+        return
+      }
+      let id = getId()
+      let mid = ''
+      let amount = 0
+      for (let i = 0; i < this.goods.length; i++) {
+        let item = this.goods[i]
+        if (i < this.goods.length - 1) {
+          mid += item.id + ','
+        } else {
+          mid += item.id
+        }
+        amount += parseFloat(item.current_amount)
+      }
+      let url = 'api/home/placeOrder'
+      this.$http.post(url, {user_id: id, menu_id: mid, total_amount: amount})
+          .then(resp => {
+            let data = resp.data
+            this.$toast(data.msg)
+          }).catch(() => {
+        this.$toast('下单失败')
+      })
+    },
+    requestData() {
+      let url = 'api/home/storeDetails?store_id=' + this.id + '&user_id=' + getId()
+      this.$http.get(url)
+          .then(resp => {
+            let data = resp.data
+            if (data.code === 0) {
+              this.$toast(data.msg)
+              return
+            }
+            this.data = data.data
+          }).catch(() => {
+        this.$toast('请求失败')
+      })
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+header {
+  height: 50px;
+  width: 100%;
+  background: #409EFF;
+  line-height: 50px;
+  text-align: center;
+
+  i {
+    position: relative;
+    top: 50%;
+    left: 5%;
+    float: left;
+    font-size: 25px;
+    transform: translateY(-50%);
+  }
+
+  span {
+    margin-left: -5%;
+    color: #FFFFFF;
+  }
+
+  .star {
+    float: right;
+    position: relative;
+    right: 5%;
+    font-size: 14px;
+  }
+
+}
+
 .content {
   margin-top: 5%;
   width: 90%;

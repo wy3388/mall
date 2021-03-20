@@ -2,30 +2,67 @@
   <div>
     <Header :show-back="false" title="好店发现"/>
     <div class="body">
-      <div class="content">
-        <div class="items" v-for="(item, index) in 10" :key="index">
-          <el-card>
-            <div class="item">
-              <img src="../assets/logo.png" alt=""/>
-              <span>叫了只鸡叫了只鸡叫了只鸡</span>
-              <span class="text-color-gray">月售2888</span>
-              <span class="text-color-gray">起送¥15</span>
-            </div>
-          </el-card>
+      <van-list v-model="loading"
+                :finished="finished"
+                finished-text="没有更多了"
+                @load="requestData">
+        <div class="content">
+          <div class="items" v-for="(item, index) in list" :key="index">
+            <el-card>
+              <div class="item" @click="toInfo(item.id)">
+                <img :src="item.img" alt=""/>
+                <span>{{ item.name }}</span>
+                <!--              <span class="text-color-gray">月售2888</span>-->
+                <span class="text-color-gray">起送¥{{ item.start_send_amount }}</span>
+              </div>
+            </el-card>
+          </div>
         </div>
-      </div>
+      </van-list>
     </div>
     <BottomMenu :index="2"/>
   </div>
 </template>
 
 <script>
-import Header from "@/components/Header";
-import BottomMenu from "@/components/BottomMenu";
+import Header from "../components/Header";
+import BottomMenu from "../components/BottomMenu";
 
 export default {
   name: "Hot",
-  components: {BottomMenu, Header}
+  components: {BottomMenu, Header},
+  data() {
+    return {
+      list: [],
+      page: 1,
+      loading: false,
+      finished: false
+    }
+  },
+  methods: {
+    requestData() {
+      let url = 'api/home/discoverList'
+      this.$http.get(url)
+          .then(resp => {
+            let data = resp.data
+            if (data.code === 0) {
+              this.$toast(data.msg)
+              return
+            }
+            this.list = data.data.data
+            this.page++
+            this.loading = false
+            if (this.page > data.data.current_page) {
+              this.finished = true
+            }
+          }).catch(() => {
+        this.$toast('请求失败')
+      })
+    },
+    toInfo(id) {
+      this.$router.push({path: '/info', query: {id: id}})
+    }
+  }
 }
 </script>
 

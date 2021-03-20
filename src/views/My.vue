@@ -5,13 +5,13 @@
       <div class="content">
         <el-card>
           <div class="top">
-            <img src="../assets/logo.png" alt="">
-            <span>我是吃货</span>
+            <img :src="data.avatar" alt="">
+            <span>{{ data.username }}</span>
             <nav>
               <el-card>
                 <div>
-                  <span>账户余额: <span>¥20</span></span>
-                  <div class="add">
+                  <span>账户余额: <span>¥{{ data.total_balance }}</span></span>
+                  <div class="add" @click="toEdit(1)">
                     <el-link>立即充值</el-link>
                   </div>
                 </div>
@@ -21,7 +21,7 @@
         </el-card>
         <div class="bottom">
           <el-card>
-            <div class="item">
+            <div class="item" @click="toEdit(3)">
               <el-card>
                 <div>
                   <i class="el-icon-phone"></i>
@@ -29,7 +29,7 @@
                 </div>
               </el-card>
             </div>
-            <div class="item">
+            <div class="item" @click="toEdit(2)">
               <el-card>
                 <div>
                   <i class="el-icon-edit"></i>
@@ -37,7 +37,7 @@
                 </div>
               </el-card>
             </div>
-            <div class="item">
+            <div class="item" @click="toEdit(4)">
               <el-card>
                 <div>
                   <i class="el-icon-lock"></i>
@@ -45,7 +45,7 @@
                 </div>
               </el-card>
             </div>
-            <div class="item">
+            <div class="item" @click="toStar">
               <el-card>
                 <div>
                   <i class="el-icon-star-on"></i>
@@ -54,7 +54,7 @@
               </el-card>
             </div>
             <div class="item">
-              <el-button type="danger" round>退出登录</el-button>
+              <el-button type="danger" round @click="logOut">退出登录</el-button>
             </div>
           </el-card>
         </div>
@@ -65,12 +65,48 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
-import BottomMenu from "@/components/BottomMenu";
+import Header from "../components/Header";
+import BottomMenu from "../components/BottomMenu";
+import {getId} from "../util";
 
 export default {
   name: "My",
-  components: {BottomMenu, Header}
+  components: {BottomMenu, Header},
+  data() {
+    return {
+      data: {}
+    }
+  },
+  mounted() {
+    this.requestData()
+  },
+  methods: {
+    toEdit(type) {
+      this.$router.push({path: '/edit', query: {type: type}})
+    },
+    toStar() {
+      this.$router.push({path: '/star'})
+    },
+    requestData() {
+      let id = getId()
+      let url = 'api/user/getUserMsg?user_id=' + id
+      this.$http.get(url)
+          .then(resp => {
+            let data = resp.data
+            if (data.code === 0) {
+              this.$toast(data.msg)
+              return
+            }
+            this.data = data.data
+          }).catch(() => {
+        this.$toast('请求失败')
+      })
+    },
+    logOut() {
+      localStorage.clear()
+      this.$router.push({path: '/login'})
+    }
+  }
 }
 </script>
 

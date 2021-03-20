@@ -3,7 +3,7 @@
     <Header title="首页" :show-back="false"/>
     <div class="body">
       <div class="search">
-        <el-input placeholder="请输入商品" prefix-icon="el-icon-search"/>
+        <el-input placeholder="请输入商品" prefix-icon="el-icon-search" v-model="value"/>
         <el-button class="search_button" type="primary" round size="medium" icon="el-icon-search"
                    @click="search"></el-button>
       </div>
@@ -16,18 +16,17 @@
       </div>
       <div class="buttons">
         <div class="buttons_button" v-for="(item, index) in stroeTypes" :key="index">
-          <img src="../assets/logo.png" alt="">
-          <span class="text-color-gray">{{item.name}}</span>
+          <img :src="loadImg(item.id)" alt="">
+          <span class="text-color-gray">{{ item.name }}</span>
         </div>
       </div>
       <div class="hot">
         <el-card>
           <div slot="header" class="clearfix hot_title">
             <span>好店推荐</span>
-            <span style="float: right">>></span>
           </div>
           <div class="hot_content">
-            <div v-for="(item, index) in stroes" :key="index">
+            <div v-for="(item, index) in stroes" :key="index" @click="toInfo(item.id)">
               <img :src="item.img" alt=""/>
               <span>{{ item.name }}</span>
             </div>
@@ -42,23 +41,23 @@
                     finished-text="没有更多了"
                     @load="requestData">
             <el-card v-for="(item, index) in list" :key="index">
-              <div class="item">
+              <div class="item" @click="toInfo(item.store_id)">
                 <div class="item_left">
                   <img :src="item.img" alt="">
                 </div>
                 <div class="item_right">
-                  <span class="shop_name">{{item.stores.name}}</span>
+                  <span class="shop_name">{{ item.stores.name }}</span>
                   <div class="score">
                     <i class="el-icon-star-on"></i>
-                    <span class="text-color-gray">{{item.stores.score}}分</span>
-                    <span class="text-color-gray">月售{{item.sale}}</span>
-                    <span class="text-color-gray">{{item.stores.delivery_time}}分钟</span>
+                    <span class="text-color-gray">{{ item.stores.score }}分</span>
+                    <span class="text-color-gray">月售{{ item.sale }}</span>
+                    <span class="text-color-gray">{{ item.stores.delivery_time }}分钟</span>
                   </div>
                   <div class="score">
-                    <span class="text-color-gray">起送 ¥{{item.stores.start_send_amount}}</span>
-                    <span class="text-color-gray" style="margin-left: 5px">配送 ¥{{item.stores.send_amount}}</span>
+                    <span class="text-color-gray">起送 ¥{{ item.stores.start_send_amount }}</span>
+                    <span class="text-color-gray" style="margin-left: 5px">配送 ¥{{ item.stores.send_amount }}</span>
                   </div>
-                  <span class="shop_name text-color-gray">{{item.stores.abstract}}</span>
+                  <span class="shop_name text-color-gray">{{ item.stores.abstract }}</span>
                 </div>
               </div>
             </el-card>
@@ -71,8 +70,8 @@
 </template>
 
 <script>
-import Header from "@/components/Header";
-import BottomMenu from "@/components/BottomMenu";
+import Header from "../components/Header";
+import BottomMenu from "../components/BottomMenu";
 
 export default {
   name: "Home",
@@ -90,15 +89,25 @@ export default {
       ],
       stroes: [],
       isFirst: true,
-      stroeTypes: []
+      stroeTypes: [],
+      value: ''
     }
   },
   mounted() {
-    this.requestData()
   },
   methods: {
+    loadImg(id){
+      return require('../assets/type' + id + '.png')
+    },
     search() {
-      this.$router.push({path: '/info'})
+      if (this.value === '') {
+        this.$toast('请输入搜索内容')
+        return
+      }
+      this.$router.push({path: '/search', query: {value: this.value}})
+    },
+    toInfo(id) {
+      this.$router.push({path: '/info', query: {id: id}})
     },
     requestData() {
       this.loading = true
@@ -114,7 +123,7 @@ export default {
         this.list = data.data.foods.data
         this.loading = false
         this.page++
-        if (this.page > data.data.foods.current_page){
+        if (this.page > data.data.foods.current_page) {
           this.finished = true
         }
       }).catch(() => {
@@ -238,11 +247,6 @@ export default {
 
     span {
       font-size: 18px;
-    }
-
-    span:last-child {
-      font-size: 14px;
-      float: right;
     }
   }
 }

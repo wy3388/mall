@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header title="我的订单" :show-back="false"/>
+    <Header title="收藏" :show-back="true"/>
     <div class="body">
       <van-list v-model="loading"
                 :finished="finished"
@@ -13,14 +13,13 @@
                 <img :src="item.store.img" alt="">
                 <div>
                   <span @click="toInfo(item.store.id)">{{ item.store.name }} ></span>
-                  <span>{{ item.menus[0].name }}</span>
+                  <span>{{ item.store.name }}</span>
                   <span class="text-color-gray">{{ item.create_time }}</span>
                 </div>
-                <span class="status_label">已完成</span>
               </div>
               <div class="bottom">
                 <nav>
-                  <el-button type="danger" round size="small" @click="del(item.id)">删除订单</el-button>
+                  <el-button type="danger" round size="small" @click="del(item.id)">取消收藏</el-button>
                 </nav>
               </div>
             </el-card>
@@ -28,30 +27,27 @@
         </div>
       </van-list>
     </div>
-    <BottomMenu :index="3"/>
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
-import BottomMenu from "../components/BottomMenu";
 import {getId} from "../util";
 
 export default {
-  name: "Order",
-  components: {BottomMenu, Header},
+  name: "Star",
+  components: {Header},
   data() {
     return {
-      page: 1,
       loading: false,
       finished: false,
-      list: []
+      list: [],
+      page: 1
     }
   },
   methods: {
     requestData() {
-      let userId = getId()
-      let url = "api/home/orderList?user_id=" + userId + "&page=" + this.page
+      let url = 'api/home/collectList?user_id=' + getId()
       this.$http.get(url)
           .then(resp => {
             let data = resp.data
@@ -66,12 +62,14 @@ export default {
               this.finished = true
             }
           }).catch(() => {
-        this.$toast('请求失败')
+        this.$toast('获取失败')
       })
     },
+    toInfo(id) {
+      this.$router.push({path: '/info', query: {id: id}})
+    },
     del(id) {
-      let url = 'api/home/deleteOrder'
-      this.$http.post(url, {order_id: id})
+      this.$http.post('api/home/deleteCollect', {collect_id: id})
           .then(resp => {
             let data = resp.data
             if (data.code === 0) {
@@ -86,22 +84,19 @@ export default {
           }).catch(() => {
         this.$toast('操作失败')
       })
-    },
-    toInfo(id) {
-      this.$router.push({path: '/info', query: {id: id}})
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-
 .content {
   width: 90%;
+  margin: 5%;
 
   .item {
     width: 100%;
-    margin: 5%;
+    margin: 5% 0;
 
     .top {
       display: flex;
@@ -144,5 +139,4 @@ export default {
     }
   }
 }
-
 </style>
