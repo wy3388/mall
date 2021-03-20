@@ -9,15 +9,15 @@
       </div>
       <div class="banner">
         <el-carousel height="150px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
+          <el-carousel-item v-for="item in banners" :key="item">
+            <img :src="item" style="height: 100%;width: 100%;" alt=""/>
           </el-carousel-item>
         </el-carousel>
       </div>
       <div class="buttons">
-        <div class="buttons_button" v-for="(item, index) in 8" :key="index">
+        <div class="buttons_button" v-for="(item, index) in stroeTypes" :key="index">
           <img src="../assets/logo.png" alt="">
-          <span>美食</span>
+          <span class="text-color-gray">{{item.name}}</span>
         </div>
       </div>
       <div class="hot">
@@ -27,68 +27,38 @@
             <span style="float: right">>></span>
           </div>
           <div class="hot_content">
-            <div>
-              <img src="../assets/logo.png" alt=""/>
-              <span>乡村基(大坪店)</span>
-            </div>
-            <div>
-              <img src="../assets/logo.png" alt=""/>
-              <span>乡村基(大坪店)</span>
-            </div>
-            <div>
-              <img src="../assets/logo.png" alt=""/>
-              <span>乡村基(大坪店)</span>
-            </div>
-            <div>
-              <img src="../assets/logo.png" alt=""/>
-              <span>乡村基(大坪店)</span>
+            <div v-for="(item, index) in stroes" :key="index">
+              <img :src="item.img" alt=""/>
+              <span>{{ item.name }}</span>
             </div>
           </div>
         </el-card>
       </div>
       <div class="hot_goods">
         <span>热门美食推荐</span>
-        <div class="hot_goods_top">
-          <el-select clearable placeholder="请选择" value size="mini" class="select_menu">
-            <!--            <el-option-->
-            <!--                v-for="item in options"-->
-            <!--                :key="item.value"-->
-            <!--                :label="item.label"-->
-            <!--                :value="item.value">-->
-            <!--            </el-option>-->
-          </el-select>
-          <el-select clearable placeholder="请选择" value size="mini" class="select_menu">
-            <!--            <el-option-->
-            <!--                v-for="item in options"-->
-            <!--                :key="item.value"-->
-            <!--                :label="item.label"-->
-            <!--                :value="item.value">-->
-            <!--            </el-option>-->
-          </el-select>
-        </div>
         <div class="hot_list">
           <van-list v-model="loading"
                     :finished="finished"
                     finished-text="没有更多了"
-                    @load="onLoad">
+                    @load="requestData">
             <el-card v-for="(item, index) in list" :key="index">
               <div class="item">
                 <div class="item_left">
-                  <img src="../assets/logo.png" alt="">
+                  <img :src="item.img" alt="">
                 </div>
                 <div class="item_right">
-                  <span class="shop_name">享多味炸鸡（巴国城店铺）啊啊啊啊啊啊</span>
+                  <span class="shop_name">{{item.stores.name}}</span>
                   <div class="score">
                     <i class="el-icon-star-on"></i>
-                    <span class="text-color-gray">4.6分</span>
-                    <span class="text-color-gray">月售1200</span>
-                    <span class="text-color-gray">30分钟</span>
+                    <span class="text-color-gray">{{item.stores.score}}分</span>
+                    <span class="text-color-gray">月售{{item.sale}}</span>
+                    <span class="text-color-gray">{{item.stores.delivery_time}}分钟</span>
                   </div>
                   <div class="score">
-                    <span class="text-color-gray">起送 ¥15</span>
-                    <span class="text-color-gray" style="margin-left: 5px">配送 ¥2.5</span>
+                    <span class="text-color-gray">起送 ¥{{item.stores.start_send_amount}}</span>
+                    <span class="text-color-gray" style="margin-left: 5px">配送 ¥{{item.stores.send_amount}}</span>
                   </div>
-                  <span class="shop_name text-color-gray">描述描述描述描述描述描述描述描述描述描述描述描述描述描述</span>
+                  <span class="shop_name text-color-gray">{{item.stores.abstract}}</span>
                 </div>
               </div>
             </el-card>
@@ -112,26 +82,43 @@ export default {
       loading: false,
       finished: false,
       list: [],
-      page: 1
+      page: 1,
+      banners: [
+        require('../assets/banner.jpg'),
+        require('../assets/banner1.jpg'),
+        require('../assets/banner2.png')
+      ],
+      stroes: [],
+      isFirst: true,
+      stroeTypes: []
     }
+  },
+  mounted() {
+    this.requestData()
   },
   methods: {
     search() {
       this.$router.push({path: '/info'})
     },
-    onLoad() {
-      setTimeout(() => {
-        for (let i = 0; i <= 10; i++) {
-          this.list.push(i)
-        }
-        this.finished = true
-      }, 1000)
-    },
     requestData() {
-      this.$http.get("").then(resp => {
-        console.log(resp)
-      }).catch(err => {
-        console.log(err)
+      this.loading = true
+      let url = 'api/home/home?type_id=1&page=' + this.page
+      this.$http.get(url).then(resp => {
+        let data = resp.data
+        if (data.code === 0) {
+          this.$toast(data.msg)
+          return
+        }
+        this.stroes = data.data.stroes
+        this.stroeTypes = data.data.stroeTypes
+        this.list = data.data.foods.data
+        this.loading = false
+        this.page++
+        if (this.page > data.data.foods.current_page){
+          this.finished = true
+        }
+      }).catch(() => {
+        this.$toast('请求失败')
       })
     }
   }
@@ -148,19 +135,6 @@ export default {
 
   span {
     font-size: 18px;
-  }
-
-  .hot_goods_top {
-    margin-top: 2%;
-    display: flex;
-
-    .select_menu {
-      width: 30%;
-
-      &:last-child {
-        margin-left: 5%;
-      }
-    }
   }
 
   .hot_list {
@@ -295,7 +269,7 @@ export default {
     }
 
     span {
-      font-size: 14px;
+      font-size: 12px;
     }
   }
 }
@@ -317,22 +291,6 @@ export default {
   margin-top: 2%;
   width: 90%;
   height: 150px;
-}
-
-.el-carousel__item h3 {
-  color: #475669;
-  font-size: 14px;
-  opacity: 0.75;
-  line-height: 150px;
-  margin: 0;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: #99a9bf;
-}
-
-.el-carousel__item:nth-child(2n+1) {
-  background-color: #d3dce6;
 }
 
 </style>
