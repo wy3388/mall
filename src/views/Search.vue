@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header title="搜索" :show-back="true"/>
+    <Header :title="title" :show-back="true"/>
     <div class="hot_list">
       <van-list v-model="loading"
                 :finished="finished"
@@ -44,31 +44,62 @@ export default {
       finished: false,
       list: [],
       value: '',
-      page: 1
+      page: 1,
+      type: "",
+      title: ''
     }
   },
   mounted() {
-    this.value = this.$route.query.value;
+    this.value = this.$route.query.value
+    this.type = this.$route.query.type
+    if (this.type === '1') {
+      this.title = '搜索'
+    }
+    if (this.type === '2') {
+      this.title = '分类'
+    }
   },
   methods: {
     requestData() {
-      let url = 'api/home/menuSearch?name=' + this.value
-      this.$http.get(url)
-          .then(resp => {
-            let data = resp.data
-            if (data.code === 0){
-              this.$toast(data.msg)
-              return
-            }
-            this.list = data.data.data
-            this.page++
-            this.loading = false
-            if (this.page > data.data.current_page) {
-              this.finished = true
-            }
-          }).catch(() => {
-        this.$toast('请求失败')
-      })
+      // 搜索
+      if (this.type === '1') {
+        let url = 'api/home/menuSearch?name=' + this.value
+        this.$http.get(url)
+            .then(resp => {
+              let data = resp.data
+              if (data.code === 0) {
+                this.$toast(data.msg)
+                return
+              }
+              this.list = data.data.data
+              this.page++
+              this.loading = false
+              if (this.page > data.data.current_page) {
+                this.finished = true
+              }
+            }).catch(() => {
+          this.$toast('请求失败')
+        })
+      }
+      // 分类
+      if (this.type === '2') {
+        let url = 'api/home/home?type_id=' + this.value + '&page=' + this.page
+        this.$http.get(url).then(resp => {
+          let data = resp.data
+          if (data.code === 0) {
+            this.$toast(data.msg)
+            return
+          }
+          this.list = data.data.foods.data
+          this.loading = false
+          this.page++
+          if (this.page > data.data.foods.current_page) {
+            this.finished = true
+          }
+        }).catch(() => {
+          this.$toast('请求失败')
+        })
+      }
     }
   }
 }

@@ -15,7 +15,7 @@
         </el-carousel>
       </div>
       <div class="buttons">
-        <div class="buttons_button" v-for="(item, index) in stroeTypes" :key="index">
+        <div class="buttons_button" v-for="(item, index) in stroeTypes" :key="index" @click="toClassify(item.id)">
           <img :src="loadImg(item.id)" alt="">
           <span class="text-color-gray">{{ item.name }}</span>
         </div>
@@ -96,7 +96,10 @@ export default {
   mounted() {
   },
   methods: {
-    loadImg(id){
+    toClassify(id) {
+      this.$router.push({path: '/search', query: {value: id, type: "2"}})
+    },
+    loadImg(id) {
       return require('../assets/type' + id + '.png')
     },
     search() {
@@ -104,13 +107,12 @@ export default {
         this.$toast('请输入搜索内容')
         return
       }
-      this.$router.push({path: '/search', query: {value: this.value}})
+      this.$router.push({path: '/search', query: {value: this.value, type: "1"}})
     },
     toInfo(id) {
       this.$router.push({path: '/info', query: {id: id}})
     },
     requestData() {
-      this.loading = true
       let url = 'api/home/home?type_id=1&page=' + this.page
       this.$http.get(url).then(resp => {
         let data = resp.data
