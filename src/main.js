@@ -9,6 +9,8 @@ import List from 'vant';
 import 'vant/lib/button/style';
 import 'vue2-toast/lib/toast.css';
 import Toast from 'vue2-toast';
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
@@ -19,6 +21,7 @@ Vue.use(Toast, {
     wordWrap: true,
     width: '200px'
 })
+Vue.use(VueAxios, axios)
 
 new Vue({
     router,
