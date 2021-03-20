@@ -3,12 +3,13 @@
     <div class=content>
       <el-card>
         <div slot="header">
-          <h2>登录</h2>
+          <h2>注册</h2>
         </div>
         <el-input placeholder="请输入账号"></el-input>
         <el-input placeholder="请输入密码" class="input"></el-input>
-        <el-button type="primary" class="button">登录</el-button>
-        <span class="to_register text-color-gray">没有账号?</span>
+        <el-input placeholder="请确认密码" class="input"></el-input>
+        <el-button type="primary" class="button">注册</el-button>
+        <span class="to_register text-color-gray">已有账号</span>
       </el-card>
     </div>
   </div>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  name: "Login"
+  name: "Register"
 }
 </script>
 
@@ -41,6 +42,5 @@ export default {
   font-size: 12px;
   margin-top: 20%;
   width: 100%;
-  text-align: end;
 }
 </style>
