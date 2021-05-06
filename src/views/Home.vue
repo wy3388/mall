@@ -72,6 +72,7 @@
 <script>
 import Header from "../components/Header";
 import BottomMenu from "../components/BottomMenu";
+import {getId} from "../util";
 
 export default {
   name: "Home",
@@ -113,7 +114,7 @@ export default {
       this.$router.push({path: '/info', query: {id: id}})
     },
     requestData() {
-      let url = 'api/home/home?type_id=1&page=' + this.page
+      let url = 'api/home/home?user_id=' + getId() +'&page=' + this.page
       this.$http.get(url).then(resp => {
         let data = resp.data
         if (data.code === 0) {

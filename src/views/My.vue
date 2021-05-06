@@ -53,6 +53,14 @@
                 </div>
               </el-card>
             </div>
+            <div class="item" @click="toTop">
+              <el-card>
+                <div>
+                  <i class="el-icon-s-promotion"></i>
+                  <span>排行榜</span>
+                </div>
+              </el-card>
+            </div>
             <div class="item">
               <el-button type="danger" round @click="logOut">退出登录</el-button>
             </div>
@@ -86,6 +94,9 @@ export default {
     },
     toStar() {
       this.$router.push({path: '/star'})
+    },
+    toTop() {
+      this.$router.push({path: '/top'})
     },
     requestData() {
       let id = getId()

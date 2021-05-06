@@ -11,6 +11,7 @@ import Search from "../views/Search";
 import Edit from "../views/Edit";
 import Star from "../views/Star";
 import {getData} from "../util";
+import Top from "../views/Top";
 
 Vue.use(VueRouter)
 
@@ -87,6 +88,14 @@ const routes = [
         component: Star,
         meta: {
             auth: true
+        }
+    },
+    {
+        path: '/top',
+        name: 'Top',
+        component: Top,
+        meta: {
+            auth: false
         }
     }
 ]
